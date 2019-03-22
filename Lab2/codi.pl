@@ -63,4 +63,7 @@ suma_demas([]).
 suma_demas(L):- sum(L,X), pert(Y,L), X is 2*Y,!.
 
 %9
-suma_ants(L):-concat(L1,[X|_],L),suma(L1,X),!.
+suma_ants(L):-concat(L1,[X|_],L),sum(L1,X),!.
+
+%10
+card(L)
