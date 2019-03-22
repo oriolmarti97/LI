@@ -3,13 +3,23 @@ pert(X,[X|_]).
 pert(X,[_|L]):-pert(X,L).
 
 concat([],L,L).
-concat([X|L1],[L2],[X|L]):-concat(L1,L2,L).
+concat([X|L1],L2,[X|L]):-concat(L1,L2,L).
+
+pert_con_resto(X,L,R):-concat(L1,[X|L2],L),concat(L1,L2,R).
+
 
 nat(0).
-nat(N):-N1 is N-1,nat(N1).
+nat(N):-nat(N1),N1 is N+1.
 
 sum([],0).
 sum([X|L],S):-sum(L,S1), S is S1+X.
+
+permutacion([],[]).
+permutacion(L,[X|P]):-pert_con_resto(X,L,R),permutacion(R,P).
+
+insertion(X,[],[X]).
+insertion(X,[Y|L],[X,Y|L]):-X<Y.
+insertion(X,[Y|L],[Y|R]):-insertion(X,L,R).
 
 %Exercicis:
 %2
@@ -64,6 +74,48 @@ suma_demas(L):- sum(L,X), pert(Y,L), X is 2*Y,!.
 
 %9
 suma_ants(L):-concat(L1,[X|_],L),sum(L1,X),!.
-
 %10
-card(L)
+card([],[]).
+card([X|L],[[X,N1]|Cr]):-card(L,C), pert_con_resto([X,N],C,Cr),!,N1 is N+1.
+card([X|L],[[X,1]|C]):-card(L,C).
+
+card(L):-card(L,C),write(C).
+
+%11
+esta_ordenada([]).
+esta_ordenada([_]).
+esta_ordenada([X,Y|L]):-X=<Y, esta_ordenada([Y|L]),!.
+
+%12
+
+ordenacion(L1,L2):-permutacion(L1,L2),esta_ordenada(L2),!.
+
+%14
+insertionsort([],[]).
+insertionsort([X|L],R):-insertionsort(L,LL),insertion(X,LL,R).
+
+%16
+split([],[],[]).
+split([A],[A],[]).
+split([A,B|R],[A|Ra],[B|Rb]):-split(R,Ra,Rb).
+
+merge(L,[],L):-!.
+merge([],L,L).
+merge([X|L1],[Y|L2],[X|L]):-X=<Y,merge(L1,[Y|L2],L).
+merge(L1,[Y|L2],[Y|L]):-merge(L1,L2,L).
+
+mergesort([],[]):-!.
+mergesort([X],[X]):-!.
+mergesort(L,R):-split(L,L1,L2),mergesort(L1,R1),mergesort(L2,R2),merge(R1,R2,R),!.
+
+%17
+escriu([]):-write(' '),nl,!.
+escriu([X|L]):-write(X),escriu(L).
+nmembers(_,0,[]):-!.
+nmembers(A,N,[X|S]):-pert(X,A),NN is N-1, nmembers(A,NN,S).
+
+diccionario(A,N):-nmembers(A,N,L),escriu(L),fail.
+
+%18
+es_capicua([X|L]):-concat(_,[X],L).
+palindromos(L):-permutacion(L,R),es_capicua(R),write(R),fail.
