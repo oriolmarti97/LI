@@ -11,3 +11,13 @@ peca_igual([X,Y],[Y,X]).
 
 chain([],[]).
 chain([P|L],[Q|R]):- peca_igual(P,Q),chain(L,R), cadena_valida([Q|R]).
+
+subcjto([],[]).  %subcjto(L,S) significa "S es un subconjunto de L".
+subcjto([X|C],[X|S]):-subcjto(C,S).
+subcjto([_|C],S):-subcjto(C,S).
+
+permutacion([],[]).
+permutacion(L,[X|P]) :- select(X,L,R), permutacion(R,P).
+
+all_chains(L):-subcjto(L,R), permutacion(R,R2), chain(R2,RR),write(RR),nl,fail.
+all_chains(_).

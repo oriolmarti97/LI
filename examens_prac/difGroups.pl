@@ -31,15 +31,25 @@ lastYearTeam([2,4,15,17,18]).
 student(S):-numStudents(N), between(1,N,S).
 team(T):-   numTeams(N),    between(1,N,T).
 incompatible(S1,S2):- %% returns a pair of students that coincided last year
-    student(S1), student(S2), S1 < S2, true. % COMPLETE THIS!
+    student(S1), student(S2), S1 < S2, lastYearTeam(T), pert(S1,T), pert(S2,T). % COMPLETE THIS!
 
 %%%%%%  SAT Variables:
 satVariable( st(S,T) ):- student(S), team(T). % student S goes to team T
 
-writeClauses:- 
+writeClauses:-
+    correctSize,
+    atMostOneIncompatibility,
     true,!.                    % this way you can comment out ANY previous line of writeClauses
 writeClauses:- told, nl, write('writeClauses failed!'), nl,nl, halt.
 
+correctSize:-team(T), findall(st(S,T),student(S),L),numStudents(NS), exactly(NS,L), fail.
+correctSize. 
+
+%S'avalúa com a cert si els estudiants S i S2 són incompatibles i estan al mateix equip
+incompatibles(S,S2):-S<S2, st(S,T), st(S2,T2), T==T2, incompatibles(S,S2).
+
+atMostOneIncompatibility:-student(S),findall(incompatibles(S,S2),student(S2),L), atMost(1,L),fail.
+atMostOneIncompatibility.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% show the solution. Here M contains the literals that are true in the model:

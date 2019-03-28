@@ -49,8 +49,26 @@ neighborNeighborhood(N,NH):-info(N,_,NH).
 satVariable( chosen(N) ):- neighbor(N).
 
 writeClauses:-   
+    exactNumRepresentatives,
+    allNeighborsRepresented,
+    allNeighborhoodsRepresented,
     true,!.                    % this way you can comment out ANY previous line of writeClauses
 writeClauses:- told, nl, write('writeClauses failed!'), nl,nl, halt.
+
+exactNumRepresentatives:-findall(chosen(N),neighbor(N),L), numRepresentatives(R), exactly(R,L), fail.
+exactNumRepresentatives.
+
+allNeighborhoodsRepresented:-neighbor(N), findall(chosen(NH),neighborNeighborhood(N,NH),L), atLeast(1,L),fail.
+allNeighborhoodsRepresented.
+
+pert(X,[X|_]).
+pert(X,[_|L]):-pert(X,L).
+
+%neighborRepresented(N,NR):-neighborRepresentedBy(N,L),select(NR,L,_).
+neighborRepresented(N,NR):-neighborRepresentedBy(N,L),pert(NR,L).
+
+allNeighborsRepresented:-neighbor(N), findall(chosen(NR),neighborRepresented(N,NR),L), atLeast(1,L),fail.
+allNeighborsRepresented.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%

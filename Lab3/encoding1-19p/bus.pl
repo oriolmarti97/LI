@@ -65,12 +65,24 @@ bus(B):-                    numBuses(N), between(1,N,B).
 trip(C1-C2):-               cities(L), member(C1,L), member(C2,L), C1 \= C2.
 
 %%%%%%  SAT Variables:
-
+%bdc significa "El bus B està a la ciutat C el dia D
+sat_variable( bdc(B,D,C) ):-bus(B),day(D),city(C).
 
 writeClauses:- 
+    allRoutesCovered,          % Per tota parella de ciutats C1 C2 existeix un bus que viatja d'una a l'altra algun dia
+    allBusesMaxKm,             % Cap bus recorre més km en dos dies que el màxi
+    everyDayOneBusOneCity,     % Cada dia a cada ciutat hi ha un únic bus
     true,!.                    % this way you can comment out ANY previous line of writeClauses
 writeClauses:- told, nl, write('writeClauses failed!'), nl,nl, halt.
 
+allRoutesCovered:- city(C1), findall(trip(C1-C2),city(C2),L), atLeast(1,L), fail.
+allRoutesCovered.
+
+allBusesMaxKm:- bus(B),consecutiveDays(D1,D2,D3), bdc(B,D1,C1), bdc(B,D2,C2), bdc(B,D3,C3), maxDist(MD), dist(C1,C2,D1), dist(C2,C3,D2), D1+D2=<MD,writeClause([bdc(B,D1,C1),bdc(B,D2,C2),bdc(B,D3,C3)]),fail.
+allBusesMaxKm.
+
+everyDayOneBusOneCity:-city(C),day(D),findall(bdc(B,D,C),bus(B),L),exactly(1,L),fail.
+everyDayOneBusOneCity.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% show the solution. Here M contains the literals that are true in the model:

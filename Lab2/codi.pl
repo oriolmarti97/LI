@@ -117,5 +117,31 @@ nmembers(A,N,[X|S]):-pert(X,A),NN is N-1, nmembers(A,NN,S).
 diccionario(A,N):-nmembers(A,N,L),escriu(L),fail.
 
 %18
-es_capicua([X|L]):-concat(_,[X],L).
-palindromos(L):-permutacion(L,R),es_capicua(R),write(R),fail.
+es_capicua([]).
+es_capicua([X|L]):-concat(L1,[X],L),es_capicua(L1).
+no_pert(X,L):-pert(X,L),!,fail.
+no_pert(_,_).
+permutacions_diferents(L,A,[L1|R]):-permutacion(L,L1),no_pert(L1,A),permutacions_diferents(L1,[L1|A],R).
+permutacions_diferents(_,_,[]).
+escriu_palindroms(L):-pert(X,L),es_capicua(X),write(X),nl,fail.
+escriu_palindroms(_).
+palindromos(L):-permutacions_diferents(L,[],R),escriu_palindroms(R).
+
+%19
+suma_inv([],[],0).
+suma_inv([X|L1],[Y|L2],Z):-suma_inv(L1,L2,T),Z is 10*T+X+Y.
+suma(L1,L2,R):-invers(L1,R1),invers(L2,R2),suma_inv(R1,R2,R).
+
+valors([],[]).
+valors([X|L],[[X,Y]|R]):-nat(Y),Y<10,valors(L,R).
+valors(_,_).
+
+valor(X,[[X,Y]|_],Y).
+valor(X,[_|L],Y):-valor(X,L,Y).
+
+lletres_a_nombres([],_,[]).
+lletres_a_nombres([X|L],V,[Y|R]):-valor(X,V,Y),lletres_a_nombres(L,V,R).
+
+suma_lletres(L1,L2,V,R):-lletres_a_nombres(L1,V,LL1),lletres_a_nombres(L2,V,LL2),suma(LL1,LL2,R).
+
+send_more_money:-valors([S,E,N,D,M,O,R,Y],V),suma_lletres([S,E,N,D],[M,O,R,E],V,X),lletres_a_nombres([M,O,N,E,Y],V,L),suma(L,[0,0,0,0,0],Y), X==Y, write(V),nl.
