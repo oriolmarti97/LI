@@ -1,0 +1,121 @@
+PROBLEM 1
+
+=========
+
+For the first round of a certain football competition, 9 teams
+
+should be distributed into 3 different groups. In order to decide
+
+the groups a draw takes place. In it, the teams are placed in 3
+
+different pots (every pot has 3 teams) and every group is decided
+
+by taking one team from each pot. A study has been done in order to
+
+know which groups would be considered as interesting from the fans
+
+viewpoint. The goal is to decide the pots composition in such a way
+
+that every interesting group is in principle possible in the
+
+draw. Example: if teams are t1,,...,t9 and the 3 pots are
+
+POT 1: [t1, t4, t6]
+
+POT 2: [t2, t5, t3]
+
+POT 3: [t7, t8, t9]
+
+then group [t1,t8,t9] is not possible because t8 and t9 are in the same pot
+
+     group [t4,t2,t7] is possible
+
+We have the following prolog clauses that you should add to your
+
+prolog solution:
+
+numTeams(9).
+
+numPots(3).
+
+teamsInPot(3).
+
+interesting([1,6,3]). % t1, t6 and t3 is an interesting group
+
+interesting([8,2,9]).
+
+interesting([1,4,9]).
+
+interesting([3,7,1]).
+
+interesting([2,4,9]).
+
+A) [2 points] Create a predicate pots(P1,P2,P3) that, upon
+
+backtracking, generates all possible pots P1, P2, P3 (even if they do
+
+not allow all interesting groups). Example:
+
+?- pots(P1,P2,P3), write([P1,P2,P3]), nl, fail.
+
+[[1,4,7],[2,5,8],[3,6,9]]
+
+[[1,4,7],[2,5,9],[3,6,8]]
+
+[[1,4,8],[2,5,7],[3,6,9]]
+
+[[1,4,8],[2,5,9],[3,6,7]]
+
+[[1,4,9],[2,5,7],[3,6,8]]
+
+[[1,4,9],[2,5,8],[3,6,7]]
+
+[[1,4,6],[2,5,8],[3,7,9]]
+
+[[1,4,6],[2,5,9],[3,7,8]]
+
+[[1,4,8],[2,5,6],[3,7,9]]
+
+[[1,4,8],[2,5,9],[3,7,6]]
+
+[[1,4,9],[2,5,6],[3,7,8]]
+
+[[1,4,9],[2,5,8],[3,7,6]]
+
+[[1,4,6],[2,5,7],[3,8,9]]
+
+.... (etc)
+
+Submit a single file p1.pl (other names will not be accepted!)
+
+B) [3 points] Create a predicate respectInteresting(P1,P2,P3) that,
+
+given pots P1, P2, P3, succeeds if and only if these pots allow all
+
+interesting group distributions. Use this to create a predicate solve
+
+that writes an appropriate pot distribution using the following
+
+format:
+
+?- solve.
+
+ First pot: [4,3,1]
+
+ Second pot: [2,9,8]
+
+ Third pot: [5,6,7]
+
+ true.
+
+ (NOTE THAT THIS IS NOT A CORRECT SOLUTION, IT ONLY ILLUSTRATES THE FORMAT OUTPUT)
+
+Submit a single file p2.pl (other names will not be accepted!)
+
+PROBLEM 2 [5 points]
+
+====================
+
+Complete the Prolog program football.pl. Submit a single file named
+
+football.pl (other names will not be accepted!)
