@@ -36,7 +36,7 @@ p:-	ejemplo1(RowSums,ColSums),
 	transpose(MatrixByRows,MatrixByColumns),
 	declareConstraints(MatrixByRows,RowSums),
 	declareConstraints(MatrixByColumns,ColSums),
-	labeling([ff],L), %Cal però no sé per què jaja salu2
+	labeling([ff],L), %Dóna valors a les variables de L. ff vol dir first fail, és a dir, comença assignant valors a les variables amb domini inferior per fallar abans i acabar abans
 	pretty_print(RowSums,ColSums,MatrixByRows).
 
 declareConstraints([],_).
